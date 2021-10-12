@@ -4,7 +4,8 @@ __pycache__/
 *$py.class
 
 datasets/zips
-
+models/
+gcp-key.json
 # C extensions
 *.so
 
