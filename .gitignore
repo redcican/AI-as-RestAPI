@@ -3,8 +3,10 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+app/ignored/
 datasets/zips
 models/
+*.pkl
 gcp-key.json
 # C extensions
 *.so
