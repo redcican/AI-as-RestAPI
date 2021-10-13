@@ -19,6 +19,7 @@ AI_MODEL = None
 @app.on_event("startup")
 def on_startup():
     global AI_MODEL
+    print(str(MODEL_PATH))
     AI_MODEL = ml.AIModel(
         model_path=MODEL_PATH, 
         tokenizer_path=TOKENIZER_PATH, 

@@ -22,7 +22,7 @@ class AIModel:
     tokenizer = None
     metadata = None
     
-    def __post__init__(self):
+    def __post_init__(self):
         if self.model_path.exists():
             self.model = load_model(self.model_path)
             
@@ -57,7 +57,7 @@ class AIModel:
         return sequences
     
     def get_input_from_sequences(self, sequences):
-        maxlen = self.get_metadata['max_sequence'] or 280
+        maxlen = self.get_metadata().get('max_sequence') or 280
         x_input = pad_sequences(sequences, maxlen=maxlen)
         return x_input
     
