@@ -4,6 +4,7 @@ from typing import Optional
 from . import (config, ml, db, models, schema)
 from cassandra.cqlengine.management import sync_table
 from fastapi.responses import StreamingResponse
+
 from cassandra.query import SimpleStatement
 
 app = FastAPI()
@@ -56,24 +57,27 @@ def read_inferences(my_uuid: str):
     obj = SMSInference.objects.get(uuid=my_uuid)
     return obj
 
-def fetch_rows(stmt: SimpleStatement,fetch_size:int = 25 ,session=None):
+
+def fetch_rows(
+        stmt: SimpleStatement,
+        fetch_size: int = 25,
+        session=None):
     stmt.fetch_size = fetch_size
     result_set = session.execute(stmt)
     has_pages = result_set.has_more_pages
-    yield "uuid, label, confidence, query, version\n"
+    yield "uuid,label,confidence,query,version\n"
     while has_pages:
         for row in result_set.current_rows:
-            yield f"{row['uuid']}, {row['label']},{row['confidence']},{row['query']}, \
-            {row['model_version']}\n"
-        
+            yield f"{row['uuid']},{row['label']},{row['confidence']},{row['query']},{row['model_version']}\n"
         has_pages = result_set.has_more_pages
-        result_set = session.execute(stmt, paging_state=result_set.paging_state)
-            
-        
-@app.get("/dataset")
+        result_set = session.execute(
+            stmt, paging_state=result_set.paging_state)
+
+
+@app.get("/dataset")  # /?q=this is awesome
 def export_inferences():
     global DB_SESSION
     cql_query = "SELECT * FROM spam_inference.smsinference LIMIT 10000"
     statement = SimpleStatement(cql_query)
+    # rows = DB_SESSION.execute(cql_query)
     return StreamingResponse(fetch_rows(statement, 25, DB_SESSION))
-

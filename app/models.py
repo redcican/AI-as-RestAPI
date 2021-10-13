@@ -1,6 +1,5 @@
 import uuid
 from cassandra.cqlengine import columns
-from cassandra.cqlengine.connection import default
 from cassandra.cqlengine.models import Model
 
 
