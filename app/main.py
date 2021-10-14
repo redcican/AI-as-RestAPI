@@ -80,4 +80,4 @@ def export_inferences():
     cql_query = "SELECT * FROM spam_inference.smsinference LIMIT 10000"
     statement = SimpleStatement(cql_query)
     # rows = DB_SESSION.execute(cql_query)
-    return StreamingResponse(fetch_rows(statement, 25, DB_SESSION))
+    return StreamingResponse(fetch_rows(statement, 10, DB_SESSION))
